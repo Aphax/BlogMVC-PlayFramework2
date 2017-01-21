@@ -1,32 +1,39 @@
 # A MVC blog with Play Java 2.5
 
-### How to setup
+### Requirements
 
-  - Make sure you have the [Oracle Java JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed
-  - Download the [activator](https://playframework.com/download) (v2.5.8)
-  - Put the activator file in the project file
-  - Make sure your database is already configured (see database configuration point)
+  - JDK8
+  - Mysql5
+
+### Launch local server
 
 ```sh
-$ cd PlayFramework
-$ ./activator clean
-$ ./activator run
+$ cd BlogMVC-PlayFramework2
+$ ./bin/activator run
 ```
-
-And open http://localhost:9000
+Server will compile files and then open Netty server on port 9000.
+Open http://localhost:9000
 
 ### Database configuration
 
-In my case, I used postgresql for this project. You can use an other database engine, just see the [how to](https://www.playframework.com/documentation/2.5.x/JavaDatabase) on play's documentation.
-
-If you already have a postgresql server, you must create :
-
-- A database named "blog"
-- A user named "postgres" with "admin" as a password
-- Or, you can change these parameters in application.conf file.
+Create mysql database named "blogmvc" from dump.sql root file.
+You can edit configuration in conf/application.conf file, on the "db" namespace (at the bottom).
+If you want to try another database engine, follow details here [https://www.playframework.com/documentation/2.5.x/JavaDatabase](https://www.playframework.com/documentation/2.5.x/JavaDatabase)
 
 ### Improvements TODO
 
-Improve security (xss attack may happen)
+- Comments feature
+- Better data validation in admin panel
+- Small REST API sample for comments feature
+- CSRF token security sample
+- Tests samples (Unit , Functionnal and Integration)
+- Improve this documentation
+
+### Resources / Going further
+Why is Play Framework so fast ? by Lightbend (Play's distributor)
+[https://www.lightbend.com/blog/why-is-play-framework-so-fast](https://www.lightbend.com/blog/why-is-play-framework-so-fast)
+
+The ultimate guide by YEVGENIY BRIKMAN (Play developer at LinkedIn)
+[http://www.ybrikman.com/writing/2014/03/10/the-ultimate-guide-to-getting-started/](http://www.ybrikman.com/writing/2014/03/10/the-ultimate-guide-to-getting-started/)
 
 **Enjoy!**
