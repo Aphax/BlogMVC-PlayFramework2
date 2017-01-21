@@ -1,0 +1,57 @@
+@(postForm: Form[models.Post], users: java.util.List[User], categories: java.util.List[Category])
+
+@main(title = "Blog | Admin panel", headerType = "admin") {
+  <h1>Edit post</h1>
+
+  <p><a href="@routes.Blog.all()">< Back to posts</a></p>
+
+  @* Errors for a particular field can be rendered in the following way *@
+  @if(postForm("name").errors.nonEmpty) {
+    <p class="error">Le champ name est invalide.</p>
+  }
+
+  @helper.form(if (postForm("id").value() == null) routes.Admin.postCreate() else routes.Admin.postSave(postForm("id").value().toInt), 'id -> "PostAdminEditForm") {
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group required">
+          <label for="PostName">Name :</label>
+          <input name="@postForm("name").name()" class="form-control" maxlength="255" type="text" value="@postForm("name").valueOr("")" id="PostName">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group required">
+          <label for="PostSlug">Slug :</label>
+          <input name="@postForm("slug").name()" class="form-control" maxlength="255" type="text" value="@postForm("slug").valueOr("")" id="PostSlug">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="PostCategoryId">Category :</label>
+          <select name="category.id" class="form-control" id="PostCategoryId">
+            @categories.map { c => <option value="@c.id" @if(c.id.toString.equals(postForm("category.id").valueOr(""))) {selected}>@c.name</option> }
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="PostUserId">Author :</label>
+          <select name="user.id" class="form-control" id="PostUserId">
+            @users.map { u => <option value="@u.id" @if(u.id.toString.equals(postForm("user.id").valueOr(""))) {selected}>@u.username</option> }
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-group required">
+      <label for="PostContent">Content :</label>
+      <textarea name="content" class="form-control" cols="30" rows="6" id="PostContent" required="required">@postForm("content").valueOr("")</textarea>
+    </div>
+    <div class="submit">
+      @if(postForm("id").value() != null) {
+        <input type="hidden" name="id" value="@postForm("id").value()">
+      }
+      <input class="btn btn-primary" type="submit" value="Edit">
+    </div>
+  }
+}

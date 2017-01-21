@@ -1,0 +1,11 @@
+@(categories: List[models.Category])
+
+<h4>Categories</h4>
+<div class="list-group">
+  @for(c <- categories) {
+    <a href="@routes.Blog.byCategory(c.slug)" class="list-group-item">
+      <span class="badge">@c.postCount</span>
+      @c.name
+    </a>
+  }
+</div>

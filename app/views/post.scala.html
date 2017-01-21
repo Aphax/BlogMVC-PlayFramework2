@@ -1,0 +1,77 @@
+@(post: models.Post, sidebar: Html)
+
+  @main(title = post.name) {
+    <div class="row">
+      <div class="col-md-8">
+        <div class="page-header">
+          <h1>@post.name</h1>
+          <p><small>
+            Category : <a href="@routes.Blog.byCategory(post.category.slug)">@post.category.name</a>,
+            by <a href="@routes.Blog.byAuthor(post.user.id)">@post.user.username</a> on <em>@post.created</em>
+          </small></p>
+        </div>
+
+        <article>
+          @* Outputs raw HTML content, play escapes all html code by default for security reasons *@
+          @* https://www.playframework.com/documentation/2.5.x/JavaTemplates#escaping *@
+          @Html(post.getContentAsHtml)
+        </article>
+
+        <hr>
+
+        <section class="comments">
+
+          <h3>Comment this post</h3>
+
+          <div class="alert alert-danger"><strong>Oh snap !</strong> you did some errors</div>
+
+          <form role="form">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="email" class="form-control" placeholder="Your email">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group has-error">
+                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Your username">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" rows="3" placeholder="Your comment"></textarea>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+
+          <h3>2 Commentaires</h3>
+
+          <div class="row">
+            <div class="col-md-2">
+              <img src="http://lorempicsum.com/futurama/100/100/4" width="100%">
+            </div>
+            <div class="col-md-10">
+              <p><strong>Username</strong> 10 hours ago</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laudantium voluptatibus quae doloribus dolorem earum dicta quasi. Fugit, eligendi, voluptatibus corporis deleniti perferendis accusantium totam harum dolor ab veniam laudantium!</p>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+            <div class="col-md-2">
+              <img src="http://lorempicsum.com/futurama/100/100/5" width="100%">
+            </div>
+            <div class="col-md-10">
+              <p><strong>Username</strong> 11 days ago</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laudantium voluptatibus quae doloribus dolorem earum dicta quasi. Fugit, eligendi, voluptatibus corporis deleniti perferendis accusantium totam harum dolor ab veniam laudantium!</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-md-4 sidebar">
+        @sidebar
+      </div><!-- /.sidebar -->
+    </div>
+  }

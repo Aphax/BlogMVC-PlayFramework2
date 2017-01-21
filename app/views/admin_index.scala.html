@@ -1,0 +1,37 @@
+@(currentPage: Integer, pagesTotal: Integer, postList: java.util.List[models.Post])
+
+  @main(title = "Blog | Admin panel", headerType = "admin") {
+    <h1>Manage posts</h1>
+
+    <p><a href="@routes.Admin.postNew()" class="btn btn-primary">Add a new post</a></p>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Publication date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      @for(p <- postList) {
+        <tr>
+          <td>@p.id</td>
+          <td>@p.name</td>
+          <td>@p.category.name</td>
+          <td>@p.created</td>
+          <td>
+            <a href="@routes.Admin.postEdit(p.id)" class="btn btn-primary">Edit</a>
+            <a href="@routes.Admin.postRemove(p.id)" class="btn btn-danger" onclick="return confirm('Are you sure ?')">Delete</a>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+
+    <ul class="pagination">
+      @components.pagination(currentPage, pagesTotal)
+    </ul>
+  }

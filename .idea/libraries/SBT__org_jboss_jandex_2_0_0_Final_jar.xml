@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: org.jboss:jandex:2.0.0.Final:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.jboss/jandex/bundles/jandex-2.0.0.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

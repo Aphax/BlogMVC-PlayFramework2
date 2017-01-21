@@ -1,0 +1,35 @@
+@(posts: java.util.List[models.Post], currentPage: Integer, pagesTotal: Integer, sidebar: Html)
+
+@main(title = "My awesome Blog") {
+  <div class="row">
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1>Blog</h1>
+        <p class="lead">Welcome on my blog</p>
+      </div>
+
+      @for(post <- posts) {
+        <article>
+          <h2><a href="@routes.Blog.bySlug(post.slug)">@post.name</a></h2>
+          <p><small>
+            Category : <a href="@routes.Blog.byCategory(post.category.slug)">@post.category.name</a>,
+            by <a href="@routes.Blog.byAuthor(post.user.id)">@post.user.username</a> on <em>@post.getCreated</em>
+          </small></p>
+          <p>@post.getResume(300)</p>
+          <p class="text-right"><a href="@routes.Blog.bySlug(post.slug)" class="btn btn-primary">Read more...</a></p>
+        </article>
+      }
+
+      <hr>
+
+      <ul class="pagination">
+        @components.pagination(currentPage, pagesTotal)
+      </ul>
+    </div>
+
+    <div class="col-md-4 sidebar">
+      @sidebar
+    </div><!-- /.sidebar -->
+  </div>
+
+}

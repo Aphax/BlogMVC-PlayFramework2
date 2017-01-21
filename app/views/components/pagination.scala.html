@@ -1,0 +1,18 @@
+@(currentPage: Integer, pagesTotal: Integer)
+
+<ul class="pagination">
+  @* Previous one *@
+  @if(currentPage > 1) {
+    <li><a href="?page=@(currentPage-1)">&laquo;</a></li>
+  }
+
+  @* Pages list *@
+  @for(i <- 1 to pagesTotal) {
+    <li><a href="?page=@i">@i</a></li>
+  }
+
+  @* Next one *@
+  @if(currentPage < pagesTotal) {
+    <li><a href="?page=@(currentPage+1)">&raquo;</a></li>
+  }
+</ul>
