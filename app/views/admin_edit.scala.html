@@ -6,9 +6,14 @@
   <p><a href="@routes.Blog.all()">< Back to posts</a></p>
 
   @* Errors for a particular field can be rendered in the following way *@
+  <div class="alert alert-danger">
   @if(postForm("name").errors.nonEmpty) {
-    <p class="error">Le champ name est invalide.</p>
+    <p>Le titre est invalide.</p>
   }
+  @if(postForm("slug").errors.nonEmpty) {
+    <p>Le slug est invalide.</p>
+  }
+  </div>
 
   @helper.form(if (postForm("id").value() == null) routes.Admin.postCreate() else routes.Admin.postSave(postForm("id").value().toInt), 'id -> "PostAdminEditForm") {
     <div class="row">
@@ -50,8 +55,10 @@
     <div class="submit">
       @if(postForm("id").value() != null) {
         <input type="hidden" name="id" value="@postForm("id").value()">
+        <input class="btn btn-primary" type="submit" value="Edit">
+      } else {
+        <input class="btn btn-primary" type="submit" value="Add">
       }
-      <input class="btn btn-primary" type="submit" value="Edit">
     </div>
   }
 }

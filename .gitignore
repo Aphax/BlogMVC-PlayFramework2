@@ -1,12 +1,12 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### PlayFramework template
-# Ignore Play! working directory #
 .eclipse
+.idea
 /lib/
 /logs/
+target
+project/project
 /modules
-/project/target
-/target
 tmp/
 test-result
 server.pid

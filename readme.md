@@ -23,7 +23,6 @@ If you want to try another database engine, follow details here [https://www.pla
 ### Improvements TODO
 
 - Comments feature
-- Better data validation in admin panel
 - Small REST API sample for comments feature
 - CSRF token security sample
 - Tests samples (Unit , Functionnal and Integration)

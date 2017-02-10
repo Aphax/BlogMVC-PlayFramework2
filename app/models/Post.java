@@ -36,15 +36,12 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long id;
 
-  //  @NotNull
   @Constraints.Required
   public String name = "";
 
-  //  @NotNull
   @Constraints.Required
   public String slug = "";
 
-  //  @Constraints.Required
   public String content = "";
 
   // Map Java 8 DateTime to DATETIME's database format
@@ -53,11 +50,14 @@ public class Post {
 
   @ManyToOne
   @JoinColumn(name = "category_id", referencedColumnName = "id")
+  @Constraints.Required
   public Category category;
 
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @Constraints.Required
   public User user;
+
 
   @OneToMany(mappedBy = "post")
   @OrderBy("created DESC")
