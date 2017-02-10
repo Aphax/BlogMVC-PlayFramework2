@@ -1,6 +1,5 @@
 package models;
 
-import helpers.TimeAgo;
 import org.hibernate.validator.constraints.NotEmpty;
 import play.data.format.Formats;
 import play.data.validation.Constraints;
@@ -13,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "comments")
@@ -23,12 +22,10 @@ public class Comment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long id;
 
-  @NotNull
   @Constraints.Required
   public String username = "";
 
   @Column(name = "mail")
-  @NotNull
   @Constraints.Email
   @Constraints.Required
   public String email = "";
@@ -44,42 +41,28 @@ public class Comment {
   @JoinColumn(name = "post_id", referencedColumnName = "id")
   public Post post;
 
-  public String toAgo() {
-    return TimeAgo.toDuration((LocalDateTime.now().getNano() - this.created.getNano()));
-  }
-
-  public static class CommentForm {
-    public String email;
-    public String username;
-    public String content;
-
-    public CommentForm() {
+  public String getCreatedAgo() {
+    final LocalDateTime now = LocalDateTime.now();
+    if (ChronoUnit.YEARS.between(created, now) > 0) {
+      return ChronoUnit.YEARS.between(created, now) + " year(s) ago";
     }
 
-    public CommentForm(String email, String username, String content) {
-      this.email = email;
-      this.username = username;
-      this.content = content;
+    if (ChronoUnit.MONTHS.between(created, now) > 0) {
+      return ChronoUnit.MONTHS.between(created, now) + " month(s) ago";
     }
 
-    @Override
-    public String toString() {
-      return "CommentForm{" +
-              "email='" + email + '\'' +
-              ", username='" + username + '\'' +
-              ", content='" + content + '\'' +
-              '}';
+    if (ChronoUnit.DAYS.between(created, now) > 0) {
+      return ChronoUnit.DAYS.between(created, now) + " day(s) ago";
     }
 
-    public Comment toComment(Post post) {
-      Comment comment = new Comment();
-      comment.id = null;
-      comment.content = this.content;
-      comment.username = this.username;
-      comment.email = this.email;
-      comment.post = post;
-      comment.created = LocalDateTime.now();
-      return comment;
+    if (ChronoUnit.HOURS.between(created, now) > 0) {
+      return ChronoUnit.HOURS.between(created, now) + " hour(s) ago";
     }
+
+    if (ChronoUnit.MINUTES.between(created, now) > 0) {
+      return ChronoUnit.MINUTES.between(created, now) + " minute(s) ago";
+    }
+
+    return "just now";
   }
 }

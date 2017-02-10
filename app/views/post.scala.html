@@ -1,4 +1,4 @@
-@(post: models.Post, sidebar: Html)
+@(post: models.Post, sidebar: Html, commentForm: Form[Comment])
 
   @main(title = post.name) {
     <div class="row">
@@ -12,7 +12,7 @@
         </div>
 
         <article>
-          @* Outputs raw HTML content, play escapes all html code by default for security reasons *@
+          @* Outputs HTML content, play escapes all html code by default for security reasons *@
           @* https://www.playframework.com/documentation/2.5.x/JavaTemplates#escaping *@
           @Html(post.getContentAsHtml)
         </article>
@@ -20,53 +20,45 @@
         <hr>
 
         <section class="comments">
-
           <h3>Comment this post</h3>
+          @if(commentForm("email").errors.nonEmpty || commentForm("username").errors.nonEmpty || commentForm("content").errors.nonEmpty) {
+            <div class="alert alert-danger"><strong>Oh snap !</strong> you did some errors</div>
+          }
 
-          <div class="alert alert-danger"><strong>Oh snap !</strong> you did some errors</div>
-
-          <form role="form">
+          @helper.form(routes.Blog.commentCreate(post.id)) {
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="email" class="form-control" placeholder="Your email">
+                  <input type="email" class="form-control" name="email" placeholder="Your email" value="@commentForm("email").valueOr("")">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group has-error">
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Your username">
+                  <input type="text" class="form-control" name="username" placeholder="Your username" value="@commentForm("username").valueOr("")">
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <textarea class="form-control" rows="3" placeholder="Your comment"></textarea>
+              <textarea class="form-control" name="content" rows="3" placeholder="Your comment">@commentForm("content").valueOr("")</textarea>
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-          </form>
+          }
 
-          <h3>2 Commentaires</h3>
+          <h3>@post.comments.size Commentaire(s)</h3>
 
-          <div class="row">
-            <div class="col-md-2">
-              <img src="http://lorempicsum.com/futurama/100/100/4" width="100%">
+          @for(comment <- post.comments) {
+            <div class="row">
+              <div class="col-md-2">
+                <img src="http://lorempicsum.com/futurama/100/100/@post.id" width="100%">
+              </div>
+              <div class="col-md-10">
+                <p><strong>@comment.username</strong> @comment.getCreatedAgo</p>
+                <p>@comment.content</p>
+              </div>
             </div>
-            <div class="col-md-10">
-              <p><strong>Username</strong> 10 hours ago</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laudantium voluptatibus quae doloribus dolorem earum dicta quasi. Fugit, eligendi, voluptatibus corporis deleniti perferendis accusantium totam harum dolor ab veniam laudantium!</p>
-            </div>
-          </div>
-          <div class="row">
-            <hr>
-            <div class="col-md-2">
-              <img src="http://lorempicsum.com/futurama/100/100/5" width="100%">
-            </div>
-            <div class="col-md-10">
-              <p><strong>Username</strong> 11 days ago</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laudantium voluptatibus quae doloribus dolorem earum dicta quasi. Fugit, eligendi, voluptatibus corporis deleniti perferendis accusantium totam harum dolor ab veniam laudantium!</p>
-            </div>
-          </div>
+          }
         </section>
       </div>
 

@@ -7,7 +7,7 @@ GET         /                                controllers.Blog.all(page: Integer 
 GET         /author/:id                      controllers.Blog.byAuthor(id: Long, page: Integer ?= 1)
 GET         /category/:slug                  controllers.Blog.byCategory(slug: String, page: Integer ?= 1)
 GET         /post/:id                        controllers.Blog.byId(id: Long)
-POST        /post/:id/addComment             controllers.Blog.addComment(id: Long)
+POST        /post/:id/comment                controllers.Blog.commentCreate(id: Long)
 GET         /adminLogin                      controllers.Blog.login
 POST        /adminLogin                      controllers.Blog.loginPost
 

@@ -11,6 +11,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.db.Database;
 import play.db.jpa.JPA;
+import play.db.jpa.JPAApi;
 import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -54,6 +55,9 @@ public class Blog extends Controller {
    */
   @Inject
   protected CacheApi cache;
+
+  @Inject
+  protected JPAApi jpa;
 
   /**
    * If you need to access directly to JDBC driver
@@ -111,7 +115,7 @@ public class Blog extends Controller {
     if (post == null) {
       return notFound();
     }
-    return ok(views.html.post.render(post, getSidebarContent()));
+    return ok(views.html.post.render(post, getSidebarContent(), formFactory.form(Comment.class)));
   }
 
   public Result bySlug(String slugName) {
@@ -120,23 +124,19 @@ public class Blog extends Controller {
     if (post == null) {
       return notFound();
     }
-    return ok(views.html.post.render(post, getSidebarContent()));
+    return ok(views.html.post.render(post, getSidebarContent(), formFactory.form(Comment.class)));
   }
 
-  public Result addComment(Long postId) {
-    Logger.info("Post.addComment(postId: " + postId + ")");
-    Form<Comment.CommentForm> commentForm = formFactory.form(Comment.CommentForm.class).bindFromRequest();
+  public Result commentCreate(Long postId) {
+    Logger.info("Post.commentCreate(postId: " + postId + ")");
+    Form<Comment> commentForm = formFactory.form(Comment.class).bindFromRequest();
     Post post = Post.find(postId);
     if (commentForm.hasErrors()) {
-      flash("error", commentForm.globalErrors().toString());
-//      return badRequest(views.html.post.render(post, lastFivePost, allCategories));
-      return TODO;
+      return badRequest(views.html.post.render(post, getSidebarContent(), commentForm));
     }
-    Comment.CommentForm comment = commentForm.get();
-    Comment comments = comment.toComment(post);
-    Logger.info("Post.addComment(), new comment: " + comments);
-    JPA.em().persist(comments);
-    JPA.em().flush();
+    Comment comment = commentForm.get();
+    comment.post = post;
+    jpa.em().persist(comment);
     return byId(postId);
   }
 
